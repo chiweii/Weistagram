@@ -61,17 +61,17 @@ class ProfilesController extends Controller
             'image' => '',
         ]);
 
-        if(request('image')){
+        if(request()->hasFile('image')){
             $imagePath = request('image')->store('profileimage','public');
 
             $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
             $image->save();
-            array_merge(
+            auth()->user()->profile->update(array_merge(
                 $data,['image' => $imagePath]
-            );
+            ));
+        }else{
+            auth()->user()->profile->update($data);
         }
-        // dd($data);
-        auth()->user()->profile->update($data);
 
         return redirect()->route('profile.show',['user'=>$user->id]);
         // dd($data);
