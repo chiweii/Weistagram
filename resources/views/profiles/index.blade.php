@@ -4,17 +4,30 @@
 <div class="container">
     <div class="row">
         <div class="col-3 p-5">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/BMW_logo_%28gray%29.svg/2048px-BMW_logo_%28gray%29.svg.png" class="rounded-circle" style="max-width: 150px;">
+            <img src="{{ $user->profile->profileImage() }}" class="rounded-circle w-100">
         </div>
         <div class="col-9 pt-5">
             <div class="d-flex justify-content-between align-items-baseline">
-                <h1>{{$user->username}}</h1>
-                <a href="">NewPost</a>
+                <div class="d-flex align-items-center pb-3">
+                    <div class="h4">{{$user->username}}</div>
+                    @if(auth()->user()->id != $user->id)
+                        <follow-button-profile user-id="{{$user->id}}" follows="{{ $follows }}"></follow-button-profile>
+                    @endif
+                </div>
+                @can('update',$user->profile)
+                    <a href="{{ route('post.create')}}">NewPost</a>
+                @endcan
+
             </div>
+
+            @can('update',$user->profile)
+                <a href="{{ route('profile.edit',[$user->id])}}">Edit Profile</a>
+            @endcan
+
             <div class="d-flex">
-                <div class="pr-5"><strong>122</strong> posts </div>
-                <div class="pr-5"><strong>10</strong> followers </div>
-                <div class="pr-5"><strong>30</strong> following </div>
+                <div class="pr-5"><strong>{{ $postCount }}</strong> posts </div>
+                <div class="pr-5"><strong>{{ $followersCount }}</strong> followers </div>
+                <div class="pr-5"><strong>{{ $followingCount }}</strong> following </div>
             </div>
             <div class="pt-4 font-weight-bold">{{$user->profile->title}}</div>
             <div>{{$user->profile->description}}</div>
@@ -22,15 +35,13 @@
         </div>
     </div>
     <div class="row pt-5">
-        <div class="col-4">
-            <img src="https://image.u-car.com.tw/articleimage_1012570.jpg" class="w-100">
-        </div>
-        <div class="col-4">
-            <img src="https://image.u-car.com.tw/articleimage_1012570.jpg" class="w-100">
-        </div>
-        <div class="col-4">
-            <img src="https://image.u-car.com.tw/articleimage_1012570.jpg" class="w-100">
-        </div>
+        @foreach($user->posts as $post)
+            <div class="col-4 pb-4">
+                <a href="/p/{{$post->id}}">
+                    <img src="/storage/{{ $post->image }}" class="w-100">
+                </a>
+            </div>
+        @endforeach
     </div>
 </div>
 @endsection

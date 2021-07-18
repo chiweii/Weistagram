@@ -11,16 +11,22 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 // Route::get('/', '[email protected]');
 
 Auth::routes();
 
 Route::get('/home', 'ProfilesController@index')->name('home');
-Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
 
+Route::get('/', 'PostController@index');
 Route::get('/p/create','PostController@create')->name('post.create');
-// Route::get('/p/{profile}')
+Route::post('/p','PostController@store');
+Route::get('/p/{post}','PostController@show');
+
+Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
+Route::get('/profile/{user}/edit','ProfilesController@edit')->name('profile.edit');
+Route::patch('profile/{user}', 'ProfilesController@update')->name('profile.update');
+
+Route::post('follow/{user}', 'FollowsController@store');
+

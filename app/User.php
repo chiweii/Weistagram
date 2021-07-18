@@ -5,7 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Mail;
+use App\Mail\RegisterMail;
 class User extends Authenticatable
 {
     use Notifiable;
@@ -33,14 +34,32 @@ class User extends Authenticatable
      *
      * @var array
      */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function boot(){
+        parent::boot();
+
+        static::created(function ($user){
+            $user->profile()->create([
+                'title' => $user->username,
+            ]);
+
+            Mail::to($user->email)->send(new RegisterMail());
+        });
+    }
+
     public function posts(){
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class)->orderBy('created_at','DESC');
     }
 
     public function profile(){
         return $this->hasOne(Profile::class);
+    }
+
+    public function following(){
+        return $this->belongsToMany(Profile::class);
     }
 }
