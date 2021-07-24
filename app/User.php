@@ -40,9 +40,12 @@ class User extends Authenticatable
     ];
 
     protected static function boot(){
+        //啟用 boot 方法
         parent::boot();
 
+        // 如果使用model 的status 是 created user的話 則進入這個function 執行動作
         static::created(function ($user){
+
             $user->profile()->create([
                 'title' => $user->username,
             ]);
