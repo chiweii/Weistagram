@@ -14,15 +14,16 @@ class NewFollowerEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $follower;
+    public $follower, $user;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user)
+    public function __construct($follower, $user)
     {
-        $this->follower = $user;
+        $this->follower = $follower; //追蹤者
+        $this->user = $user; //被追蹤者
     }
 
     /**

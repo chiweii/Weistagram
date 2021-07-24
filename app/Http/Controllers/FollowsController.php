@@ -19,8 +19,14 @@ class FollowsController extends Controller
 
         // 追蹤者有追蹤才通知，取消追蹤不通知
         if(!empty($followResult['attached'])){
+
+            // $user = 被追蹤的人
             $user = User::where('id',$followResult['attached'][0])->first();
-            event(new NewFollowerEvent($user));
+
+            // $follower = 追蹤的人(登入者)
+            $follower = auth()->user();
+
+            event(new NewFollowerEvent($follower, $user));
         }
 
         return $followResult;

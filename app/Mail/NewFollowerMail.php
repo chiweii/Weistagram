@@ -11,15 +11,16 @@ class NewFollowerMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $follower;
+    public $follower, $user;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($follower)
+    public function __construct($follower,$user)
     {
-        $this->follower = $follower;
+        $this->follower = $follower; //追蹤者
+        $this->user = $user; //被追蹤者
     }
 
     /**
@@ -31,6 +32,7 @@ class NewFollowerMail extends Mailable
     {
         return $this->markdown('emails.newfollower-email')->with([
             'follower_data' => $this->follower,
+            'user_data' => $this->user,
         ]);
     }
 }

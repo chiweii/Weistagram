@@ -10,6 +10,9 @@ use App\Mail\NewFollowerMail;
 use Mail;
 class NewFollowerNotification
 {
+    public $queue = 'listeners';
+    public $delay = 60;
+
     /**
      * Create the event listener.
      *
@@ -29,6 +32,6 @@ class NewFollowerNotification
     public function handle(NewFollowerEvent $event)
     {
         // 寄信通知被追蹤的人
-        Mail::to($event->follower->email)->send(new NewFollowerMail($event->follower));
+        Mail::to($event->user->email)->send(new NewFollowerMail($event->follower, $event->user));
     }
 }
