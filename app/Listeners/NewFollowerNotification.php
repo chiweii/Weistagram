@@ -8,10 +8,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use App\Mail\NewFollowerMail;
 
 use Mail;
-class NewFollowerNotification
+class NewFollowerNotification implements ShouldQueue
 {
-    public $queue = 'listeners';
-    public $delay = 60;
 
     /**
      * Create the event listener.
