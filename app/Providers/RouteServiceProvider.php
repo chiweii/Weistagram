@@ -30,7 +30,8 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // route 使用者參數 只接受數字 (user.id 是數字)
+        Route::pattern('user', '[0-9]+');
 
         parent::boot();
     }
