@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Image;
 use App\Post;
-
+use App\User;
 class PostController extends Controller
 {
     public function __construct(){
@@ -15,11 +15,18 @@ class PostController extends Controller
     public function index(){
         $users = auth()->user()->following()->pluck('profiles.user_id');
 
-        $posts = Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
+        //如果有追蹤者
+        if(count($users) > 0){
+            $posts = Post::whereIn('user_id',$users)->with('user')->latest()->paginate(5);
+            return view('posts.index',compact('posts'));
+        }else{
 
-        return view('posts.index',compact('posts'));
-        // dd($posts);
-
+            $users = User::where('id','!=',auth()->user()->id)->inRandomOrder()->limit(5)->get();
+            foreach ($users as $key => $user) {
+                $users[$key]['follows'] = (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+            }
+            return view('follows.first_follow_index',compact('users'));
+        }
     }
 
     public function create(){
@@ -55,8 +62,8 @@ class PostController extends Controller
 
     public function show(\App\Post $post){
 
-        $follows = auth()->user()->following->contains(auth()->user()->id);
-
+        $follows = auth()->user()->following->contains($post->user->id);
+        // dd($follows);
         return view('posts.show',compact('post','follows'));
     }
 }
