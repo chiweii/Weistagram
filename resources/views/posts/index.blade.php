@@ -3,6 +3,20 @@
 @section('content')
 <div class="container">
     @foreach($posts as $post)
+    <div class="row pt-2">
+        <div class="col-6 offset-3">
+            <div>
+                <p>
+                    <img src="/storage/{{ $post->user->profile->image }}" class="rounded-circle" style="width: 7%">
+                    <span class="font-weight-bold pl-2">
+                        <a href="/profile/{{ $post->user->id }}">
+                            <span class="text-dark">{{ $post->user->username }}</span>
+                        </a>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-6 offset-3">
             <a href="/p/{{ $post->id }}">
