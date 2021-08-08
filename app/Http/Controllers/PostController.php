@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Image;
 use App\Post;
 use App\User;
+
+use App\Events\FollowingNewPost;
+
 class PostController extends Controller
 {
     public function __construct(){
@@ -54,6 +57,10 @@ class PostController extends Controller
 
         //建立成功，導到 profile 頁面
         if($status->wasRecentlyCreated){
+            foreach (auth()->user()->profile->followers as $key => $user_data) {
+                event(new FollowingNewPost($status,auth()->user(),$user_data));
+            }
+
             return redirect()->route('profile.show',['user'=>auth()->user()->id]);
         }else{
             return redirect()->back()->withInput();

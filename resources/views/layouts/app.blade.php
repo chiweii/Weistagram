@@ -10,12 +10,12 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    {{-- <script src="{{ asset('js/app.js') }}" defer></script> --}}
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -79,4 +79,13 @@
         </main>
     </div>
 </body>
+<script src="{{ mix('js/app.js') }}"></script>
+@yield('script')
+<script>
+
+//     var channel = Echo.channel('my-channel');
+// channel.listen('.my-event', function(data) {
+//   alert(JSON.stringify(data));
+// });
+</script>
 </html>
